@@ -1,5 +1,6 @@
 import express from 'express';
 import { connectDB } from './Config/connectDB.js';
+import userRoute from './Route/userRoutes.js';
 
 const app = express();
 const port = 3000;
@@ -8,6 +9,8 @@ connectDB();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+app.use('/api',userRoute);
 
 app.get('/', (req,res) => {
     res.status(200).json({
