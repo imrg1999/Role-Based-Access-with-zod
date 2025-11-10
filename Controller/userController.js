@@ -128,3 +128,26 @@ export const deleteUser = async(req,res) => {
         })
     }
 }
+
+export const findUserById = async(req,res) => {
+    try{
+        const {id} = req.params;
+        const fetchById = await userModel.findById(id);
+        if(!fetchById) {
+            return res.status(400).json({
+                success: false,
+                message: "data could not be fetched"
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: "User data fetched successfully",
+            user: fetchById
+        })
+    }catch(error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        })
+    }
+}
