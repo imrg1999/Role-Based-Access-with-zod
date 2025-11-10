@@ -68,3 +68,41 @@ export const addNewUser = async(req,res) => {
         })
     }
 }
+
+export const updateUser = async(req,res) => {
+    try{
+        const {id} = req.params;
+        const updateReqFormat = await zodSchema.partial().parseAsync(req.body);
+        if(updateReqFormat.password) {
+            let safePassword = await passwordHashing(updateReqFormat.password);
+            updateReqFormat.password = safePassword
+        }
+        const updateData = await userModel.findByIdAndUpdate(id,
+            {...updateReqFormat}, {new: true}
+        )
+        if(!updateData) {
+            return res.status(400).json({
+                success: false,
+                message: "User data couldn't be updated",
+                user: updateReqFormat
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: "Data updated successfully",
+            user: updateData
+        })
+    } catch(error) {
+         if(error instanceof ZodError) {
+            return res.status(400).json({
+            success: false,
+            message: "Invalid Request",
+            error: error.issues
+        })
+        }
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        })
+    }
+}

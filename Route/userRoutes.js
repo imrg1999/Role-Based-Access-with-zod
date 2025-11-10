@@ -1,9 +1,13 @@
 import express from 'express';
-import { showAllUsers, addNewUser } from '../Controller/userController.js';
+import { showAllUsers, 
+    addNewUser,
+    updateUser
+ } from '../Controller/userController.js';
 
 const route = express.Router();
 
 route.get('/users',showAllUsers);
 route.post('/add',addNewUser);
+route.put('/update/:id',updateUser);
 
 export default route;
