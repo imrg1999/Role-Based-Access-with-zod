@@ -1,6 +1,7 @@
 import express from 'express';
 import { connectDB } from './Config/connectDB.js';
-import userRoute from './Route/userRoutes.js';
+import userRoutes from './Route/userRoutes.js';
+import authRoutes from './Route/authRoutes.js';
 
 const app = express();
 const port = 3000;
@@ -10,7 +11,8 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.use('/api',userRoute);
+app.use('/api',userRoutes);
+app.use('/auth',authRoutes);
 
 app.get('/', (req,res) => {
     res.status(200).json({
