@@ -1,0 +1,26 @@
+import userModel from "../Model/userModel.js";
+
+
+
+export const userAccess = async(req,res) => {
+    try{
+        const userProfile = await userModel.findById(req.user.id).select("-password");
+        if(!userProfile) {
+            return res.status(404).json({
+                success: false,
+                message: "Profile Access Denied"
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: "Welcome User",
+            user: userProfile
+        })
+    } catch(error) {
+        console.log(error.message);
+        res.status(500).json({
+            success: false,
+            message: "Access Denied"
+        })
+    }
+}
