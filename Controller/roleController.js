@@ -1,3 +1,4 @@
+import { success } from "zod";
 import userModel from "../Model/userModel.js";
 
 
@@ -17,6 +18,29 @@ export const userAccess = async(req,res) => {
             user: userProfile
         })
     } catch(error) {
+        console.log(error.message);
+        res.status(500).json({
+            success: false,
+            message: "Access Denied"
+        })
+    }
+}
+
+export const adminAccess = async(req,res) => {
+    try{
+        const admin = await userModel.find(req.user.id).select("-password");
+        if(!admin) {
+        return res.status(404).json({
+            success: false,
+            message: "Access Denied"
+        })
+        }
+        res.status(200).json({
+            success: true,
+            message: "Welcome, Admin",
+            user: admin
+        })
+    }catch(error) {
         console.log(error.message);
         res.status(500).json({
             success: false,
